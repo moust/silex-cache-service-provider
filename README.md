@@ -5,66 +5,66 @@ The Silex Cache service provider allows you to use several PHP opcode cache in y
 
 To enable it, add this dependency to your ``composer.json`` file:
 
-.. code-block:: json
-
-    {
-        "require": {
-            "moust/silex-cache-service-provider": "*"
-        }
+```json
+{
+    "require": {
+        "moust/silex-cache-service-provider": "*"
     }
+}
+```
 
 And enable it in your application:
 
-.. code-block:: php
+```php
+use Silex\Provider\CacheServiceProvider;
 
-    use Silex\Provider\CacheServiceProvider;
-
-    $app->register(new CacheServiceProvider(), array(
-        'cache.options' => array(
-            // default driver
-            'default'  => array(
-                'driver'    => 'apc',
-            ),
-            // filesystem based cache
-            'global'   => array(
-                'driver'    => 'file',
-                'cache_dir' => __DIR__ . DIRECTORY_SEPARATOR . 'temp',
-            ),
-            // Memcache based cache
-            'memcache' => array(
-                'driver'    => 'memache',
-                'memcache'  => function () {
-                    $memcache = new \Memcache();
-                    $memcache->connect('localhost', 11211);
-                    return $memcache;
-                }
-            )
+$app->register(new CacheServiceProvider(), array(
+    'cache.options' => array(
+        // default driver
+        'default'  => array(
+            'driver'    => 'apc',
+        ),
+        // filesystem based cache
+        'global'   => array(
+            'driver'    => 'file',
+            'cache_dir' => __DIR__ . DIRECTORY_SEPARATOR . 'temp',
+        ),
+        // Memcache based cache
+        'memcache' => array(
+            'driver'    => 'memache',
+            'memcache'  => function () {
+                $memcache = new \Memcache();
+                $memcache->connect('localhost', 11211);
+                return $memcache;
+            }
         )
-    ));
+    )
+));
+```
 
 Now you can using it like that:
 
-.. code-block:: php
-    
-    // store variable in default cache driver
-    $app['cache']->store('foo', 'bar');
-    // fetch variable
-    echo $app['cache']->fetch('foo');
-    // delete variable
-    $app['cache']->delete('foo');
-    // clear all cached variables
-    $app['cache']->clear();
+```php
+// store variable in default cache driver
+$app['cache']->store('foo', 'bar');
+// fetch variable
+echo $app['cache']->fetch('foo');
+// delete variable
+$app['cache']->delete('foo');
+// clear all cached variables
+$app['cache']->clear();
 
-    // or use an other defined cache driver
+// or use an other defined cache driver
 
-    // store variable in default cache driver
-    $app['caches']['memcache']->store('foo', 'bar');
-    // fetch variable
-    $app['caches']['memcache']->fetch('foo');
-    // delete variable
-    $app['caches']['memcache']->delete('foo');
-    // clear all cached variables
-    $app['caches']['memcache']->clear();
+// store variable in default cache driver
+$app['caches']['memcache']->store('foo', 'bar');
+// fetch variable
+$app['caches']['memcache']->fetch('foo');
+// delete variable
+$app['caches']['memcache']->delete('foo');
+// clear all cached variables
+$app['caches']['memcache']->clear();
+```
 
 
 # Licence
