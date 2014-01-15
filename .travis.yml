@@ -1,12 +1,14 @@
 language: php
 
-before_script:
-  - composer self-update
-  - composer install
-
-script: phpunit
-
 php:
   - 5.3
   - 5.4
   - 5.5
+
+before_script:
+  - pecl install apcu
+  - phpenv config-add tests/$TRAVIS_PHP_VERSION.ini
+  - composer self-update
+  - composer install
+
+script: phpunit
