@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/moust/silex-cache-service-provider.png?branch=master)](http://travis-ci.org/moust/silex-cache-service-provider)
+
 # Silex Cache Service Provider
 
 The Silex Cache service provider allows you to use several PHP opcode cache in your Silex application.
