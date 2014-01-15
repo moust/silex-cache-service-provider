@@ -1,16 +1,13 @@
 language: php
 
-env:
-  - APC_VERSION=3.1.9
-  - MEMCACHE_VERSION=2.2.7
-
 before_script:
-  - pecl -q install -f apc-${APC_VERSION} && echo "extension=apc.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-  - pecl -q install -f memcache-${MEMCACHE_VERSION} && echo "extension=memcache.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - pecl install apc
+  - pecl install apcu
+  - pecl install memcache
   - composer self-update
-  - composer install --dev --prefer-source
+  - composer install
 
-script: vendor/bin/phpunit
+script: phpunit
 
 php:
   - 5.3
