@@ -1,0 +1,15 @@
+language: php
+
+before_script:
+  - pecl install apc
+  - pecl install apcu
+  - pecl install memcache
+  - composer self-update
+  - composer install
+
+script: phpunit
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
