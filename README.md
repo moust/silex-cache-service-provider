@@ -19,10 +19,9 @@ To enable it, add this dependency to your ``composer.json`` file:
 ## Parameters
 
 - **cache.options**: Array of cache options.
-These options are available:
-⋅⋅- **driver**: The database driver to use, defaults to pdo_mysql. Can be any of: `apc`, `array`, `file`, `memcache`.
-⋅⋅- **cache_dir**: Only relevant for `file` cache driver, specifies the path to the cache directory
-⋅⋅- **memcache**: Only relevant for `memcache` cache driver, provide the Memcache instance to use. If not defined, a default Memcache object will be instanciated. See the Memcache documentation for additional informations : [PHP: Memcache::connect - Manual](http://www.php.net/manual/en/memcache.connect.php)
+    - **driver**: The database driver to use, defaults to pdo_mysql. Can be any of: `apc`, `array`, `file`, `memcache`.
+    - **cache_dir**: Only relevant for `file` cache driver, specifies the path to the cache directory
+    - **memcache**: Only relevant for `memcache` cache driver, provide the Memcache instance to use. If not defined, a default Memcache object will be instanciated. See the Memcache documentation for additional informations : [PHP: Memcache::connect - Manual](http://www.php.net/manual/en/memcache.connect.php)
 
 ## Registering
 
