@@ -54,7 +54,7 @@ class XcacheCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return xcache_get($key);
+        return $this->exists($key) ? serialize(xcache_get($key)) : false;
     }
 
     /**

@@ -99,6 +99,6 @@ class MemcachedCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return $this->_memcached->set($key, $var, 0, (int) $ttl);
+        return $this->_memcached->set($key, $var, (int) $ttl);
     }
 }
