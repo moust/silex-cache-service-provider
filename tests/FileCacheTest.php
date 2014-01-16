@@ -96,7 +96,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
         $foo = $cache->fetch('foo');
         $this->assertEquals($foo, 'bar');
 
-        sleep(1);
+        sleep(2);
 
         $foo = $cache->fetch('foo');
         $this->assertFalse($foo);
