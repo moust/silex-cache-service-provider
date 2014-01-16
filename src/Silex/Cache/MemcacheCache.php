@@ -58,7 +58,7 @@ class MemcacheCache extends AbstractCache
      */
     static function isSupported()
     {
-        return class_exists('\Memcache');
+        return extension_loaded('memcache');
     }
 
     /**

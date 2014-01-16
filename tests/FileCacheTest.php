@@ -47,7 +47,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
         return $cache;
     }
 
-    public function testFileCache()
+    public function testCache()
     {
         $cache = $this->instanciateCache();
 

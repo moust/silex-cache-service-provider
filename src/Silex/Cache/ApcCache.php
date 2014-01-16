@@ -18,7 +18,7 @@ class ApcCache extends AbstractCache
      */
     static function isSupported()
     {
-        return function_exists('apc_cache_info');
+        return extension_loaded('apc');
     }
 
     /**

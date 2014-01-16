@@ -34,8 +34,8 @@ class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        if ($this->memcache instanceof Memcache) {
-            $this->memcache->flush();
+        if ($this->_memcache instanceof Memcache) {
+            $this->_memcache->flush();
         }
     }
 
