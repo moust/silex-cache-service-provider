@@ -16,8 +16,28 @@ use Silex\Provider\CacheServiceProvider;
 
 class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
+    public function testOptionsInitializer()
+    {
+        $app = new Application();
+        $app->register(new CacheServiceProvider());
 
-    protected function createApplication()
+        $this->assertInstanceof('Silex\Cache\AbstractCache', $app['cache']);
+    }
+
+    public function testSingleCache()
+    {
+        $app = new Application();
+        $app->register(new CacheServiceProvider(), array(
+            'cache.options' => array(
+                'driver' => 'array'
+            ),
+        ));
+
+        $cache = $app['cache'];
+        $this->assertInstanceof('Silex\Cache\ArrayCache', $cache);
+    }
+
+    public function testMultipleCache()
     {
         if (!extension_loaded('apc')) {
             $this->setExpectedException('Silex\Cache\CacheException');
@@ -28,58 +48,41 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
         }
 
         $app = new Application();
-
         $app->register(new CacheServiceProvider(), array(
-            'cache.options' => array(
-                'default' => array(
-                    'driver'    => 'array',
+            'caches.options' => array(
+                'memory' => array(
+                    'driver' => 'array'
                 ),
-                'apc'    => array(
-                    'driver'    => 'apc',
+                'apc' => array(
+                    'driver' => 'apc'
                 ),
-                'array'  => array(
-                    'driver'    => 'array',
-                ),
-                'file'  => array(
-                    'driver'    => 'file',
-                    'cache_dir' => __DIR__ . DIRECTORY_SEPARATOR . 'temp',
+                'filesystem' => array(
+                    'driver' => 'file', 
+                    'cache_dir' => './temp'
                 ),
                 'memcache' => array(
-                    'driver'    => 'memache',
-                    'memcache'  => function () {
-                        $memcache = new \Memcache();
+                    'driver' => 'memcache',
+                    'memcache' => function () {
+                        $memcache = new \Memcache;
                         $memcache->connect('localhost', 11211);
                         return $memcache;
                     }
                 )
-            )
+            ),
         ));
 
-        return $app;
-    }
+        $this->assertInstanceof('Silex\Cache\ArrayCache', $app['caches']['memory']);
 
-    public function testRegister()
-    {
-        $app = $this->createApplication();
+        // check default cache
+        $this->assertSame($app['cache'], $app['caches']['memory']);
 
-        // default cache
-        $this->assertInstanceOf('Silex\Cache\AbstractCache', $app['cache']);
+        $this->assertInstanceof('Silex\Cache\FileCache', $app['caches']['filesystem']);
+        $this->assertEquals('./temp', $app['caches']['filesystem']->getCacheDir());
 
-        // ApcCache
-        if (extension_loaded('apc')) {
-            $this->assertInstanceOf('Silex\Cache\ApcCache', $app['caches']['apc']);
-        }
+        $this->assertInstanceof('Silex\Cache\ApcCache', $app['caches']['apc']);
 
-        // ArrayCache
-        $this->assertInstanceOf('Silex\Cache\ArrayCache', $app['caches']['array']);
-
-        // FileCache
-        $this->assertInstanceOf('Silex\Cache\FileCache', $app['caches']['file']);
-
-        // MemcacheCache
-        if (extension_loaded('memcache')) {
-            $this->assertInstanceOf('Silex\Cache\MemcacheCache', $app['caches']['memcache']);
-        }
+        $this->assertInstanceof('Silex\Cache\MemcacheCache', $app['caches']['memcache']);
+        $this->assertInstanceof('Memcache', $app['caches']['memcache']->getMemcache());
     }
 
 }

@@ -4,6 +4,7 @@
 
 The Silex Cache service provider allows you to use several PHP opcode cache in your Silex application.
 
+## Installation
 
 To enable it, add this dependency to your ``composer.json`` file:
 
@@ -15,27 +16,62 @@ To enable it, add this dependency to your ``composer.json`` file:
 }
 ```
 
-And enable it in your application:
+## Parameters
+
+- **cache.options**: Array of cache options.
+These options are available:
+⋅⋅- **driver**: The database driver to use, defaults to pdo_mysql. Can be any of: `apc`, `array`, `file`, `memcache`.
+⋅⋅- **cache_dir**: Only relevant for `file` cache driver, specifies the path to the cache directory
+⋅⋅- **memcache**: Only relevant for `memcache` cache driver, provide the Memcache instance to use. If not defined, a default Memcache object will be instanciated. See the Memcache documentation for additional informations : [PHP: Memcache::connect - Manual](http://www.php.net/manual/en/memcache.connect.php)
+
+## Registering
 
 ```php
-use Silex\Provider\CacheServiceProvider;
-
-$app->register(new CacheServiceProvider(), array(
+$app->register(new Silex\Provider\CacheServiceProvider(), array(
     'cache.options' => array(
-        // default driver
-        'default'  => array(
-            'driver'    => 'apc',
+        'driver' => 'apc'
+    )
+));
+```
+
+## Usage
+
+The Cache provider provides a cache service. Here is a usage example:
+
+```php
+// stores a variable
+$app['cache']->store('foo', 'bar');
+// stores a variable with a 1 minute lifetime
+$app['cache']->store('foo', 'bar', 60);
+// fetch variable
+echo $app['cache']->fetch('foo');
+// delete variable
+$app['cache']->delete('foo');
+// clear all cached variables
+$app['cache']->clear();
+```
+
+## Using multiple caches
+
+The Cache provider can allow access to multiple caches. In order to configure the cache drivers, replace the `cache.options` with `caches.options`. `caches.options` is an array of configurations where keys are cache names and values are options:
+
+```php
+$app->register(new Silex\Provider\CacheServiceProvider(), array(
+    'caches.options' => array(
+        'apc' => array(
+            'driver' => 'apc'
         ),
-        // filesystem based cache
-        'global'   => array(
-            'driver'    => 'file',
-            'cache_dir' => __DIR__ . DIRECTORY_SEPARATOR . 'temp',
+        'filesystem' => array(
+            'driver' => 'file', 
+            'cache_dir' => './temp'
         ),
-        // Memcache based cache
+        'memory' => array(
+            'driver' => 'array'
+        ),
         'memcache' => array(
-            'driver'    => 'memache',
-            'memcache'  => function () {
-                $memcache = new \Memcache();
+            'driver' => 'memcache',
+            'memcache' => function () {
+                $memcache = new \Memcache;
                 $memcache->connect('localhost', 11211);
                 return $memcache;
             }
@@ -44,30 +80,13 @@ $app->register(new CacheServiceProvider(), array(
 ));
 ```
 
-Now you can using it like that:
+The first registered cache is the default and can simply be accessed as you would if there was only one. Given the above configuration, these two lines are equivalent:
 
 ```php
-// store variable in default cache driver
 $app['cache']->store('foo', 'bar');
-// fetch variable
-echo $app['cache']->fetch('foo');
-// delete variable
-$app['cache']->delete('foo');
-// clear all cached variables
-$app['cache']->clear();
 
-// or use an other defined cache driver
-
-// store variable in default cache driver
-$app['caches']['memcache']->store('foo', 'bar');
-// fetch variable
-$app['caches']['memcache']->fetch('foo');
-// delete variable
-$app['caches']['memcache']->delete('foo');
-// clear all cached variables
-$app['caches']['memcache']->clear();
+$app['caches']['apc']->store('foo', 'bar');
 ```
-
 
 # Licence
 

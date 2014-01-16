@@ -19,6 +19,10 @@ class CacheServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+        $app['cache.default_options'] = array(
+            'driver' => 'array'
+        );
+
         $app['cache.drivers'] = function () {
             return array(
                 'apc'      => '\\Silex\\Cache\\ApcCache',
@@ -28,32 +32,78 @@ class CacheServiceProvider implements ServiceProviderInterface
             );
         };
 
-        $app['cache.factory'] = function ($app) {
-            return new CacheFactory($app['cache.drivers'], $app['cache.options']);
-        };
-
-        $app['cache'] = $app->share(function ($app) {
-
-            $app['cache.options'] = array_replace(
-                array(
-                    'default' => array('driver' => 'array')
-                ),
-                $app['cache.options']
-            );
-
-            $default = $app['cache.options']['default'];
-
-            return $app['cache.factory']->getCache($default['driver'], $default);
+        $app['cache.factory'] = $app->share(function ($app) {
+            return new CacheFactory($app['cache.drivers'], array());
         });
 
-        $app['caches'] = $app->share(function($app) {
-            $caches = new \Pimple;
+        $app['caches.options.initializer'] = $app->protect(function () use ($app) {
+            static $initialized = false;
 
-            foreach ($app['cache.options'] as $cache => $options) {
-                $caches[$cache] = $app['cache.factory']->getCache($options['driver'], $options);
+            if ($initialized) {
+                return;
+            }
+
+            $initialized = true;
+
+            if (!isset($app['caches.options'])) {
+                $app['caches.options'] = array('default' => isset($app['cache.options']) ? $app['cache.options'] : array());
+            }
+
+            $tmp = $app['caches.options'];
+            foreach ($tmp as $name => &$options) {
+                $options = array_replace($app['cache.default_options'], $options);
+
+                if (!isset($app['caches.default'])) {
+                    $app['caches.default'] = $name;
+                }
+            }
+            $app['caches.options'] = $tmp;
+        });
+
+        $app['caches'] = $app->share(function ($app) {
+            $app['caches.options.initializer']();
+
+            $caches = new \Pimple();
+            foreach ($app['caches.options'] as $name => $options) {
+                if ($app['caches.default'] === $name) {
+                    // we use shortcuts here in case the default has been overridden
+                    $config = $app['cache.config'];
+                } else {
+                    $config = $app['caches.config'][$name];
+                }
+
+                $factory = new CacheFactory($app['cache.drivers'], $app['caches.options']);
+
+                $caches[$name] = $caches->share(function ($caches) use ($app, $options, $config) {
+                    return $app['cache.factory']->getCache($config['driver'], $config);
+                });
             }
 
             return $caches;
+        });
+
+        $app['caches.config'] = $app->share(function ($app) {
+            $app['caches.options.initializer']();
+
+            $configs = new \Pimple();
+            foreach ($app['caches.options'] as $name => $options) {
+                $configs[$name] = $options;
+            }
+
+            return $configs;
+        });
+
+        // shortcuts for the "first" cache
+        $app['cache'] = $app->share(function ($app) {
+            $caches = $app['caches'];
+
+            return $caches[$app['caches.default']];
+        });
+
+        $app['cache.config'] = $app->share(function ($app) {
+            $caches = $app['caches.config'];
+
+            return $caches[$app['caches.default']];
         });
     }
 

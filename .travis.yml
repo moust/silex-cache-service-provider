@@ -6,9 +6,9 @@ php:
   - 5.5
 
 before_script:
-  - pecl install apcu
-  - phpenv config-add tests/$TRAVIS_PHP_VERSION.ini
+  - sh -c "if [ `php-config --vernum` -ge 50500 ] ; then pecl config-set preferred_state beta; printf "yes\n" | pecl install apcu ; else echo 'extension="apc.so"' >> ./tests/travis/php.ini ;fi"
   - composer self-update
   - composer install
 
-script: phpunit
+script:
+  - ./vendor/bin/phpunit
