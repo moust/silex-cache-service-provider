@@ -25,10 +25,14 @@ class CacheServiceProvider implements ServiceProviderInterface
 
         $app['cache.drivers'] = function () {
             return array(
-                'apc'      => '\\Moust\\Silex\\Cache\\ApcCache',
-                'array'    => '\\Moust\\Silex\\Cache\\ArrayCache',
-                'file'     => '\\Moust\\Silex\\Cache\\FileCache',
-                'memcache' => '\\Moust\\Silex\\Cache\\MemcacheCache',
+                'apc'       => '\\Moust\\Silex\\Cache\\ApcCache',
+                'array'     => '\\Moust\\Silex\\Cache\\ArrayCache',
+                'file'      => '\\Moust\\Silex\\Cache\\FileCache',
+                'memcache'  => '\\Moust\\Silex\\Cache\\MemcacheCache',
+                'memcached' => '\\Moust\\Silex\\Cache\\MemcachedCache',
+                'xcache'    => '\\Moust\\Silex\\Cache\\XcacheCache',
+                'redis'     => '\\Moust\\Silex\\Cache\\RedisCache',
+                'wincache'  => '\\Moust\\Silex\\Cache\\WincacheCache',
             );
         };
 

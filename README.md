@@ -19,7 +19,7 @@ To enable it, add this dependency to your ``composer.json`` file:
 ## Parameters
 
 - **cache.options**: Array of cache options.
-    - **driver**: The cache driver to use. Can be any of: `apc`, `array`, `file`, `memcache`.
+    - **driver**: The cache driver to use. Can be any of: `apc`, `array`, `file`, `memcache`, `memcached`, `xcache`, `redis`, `wincache`.
     - **cache_dir**: Only relevant for `file` cache driver, specifies the path to the cache directory
     - **memcache**: Only relevant for `memcache` cache driver, provide the Memcache instance to use. If not defined, a default Memcache object will be instanciated. See the Memcache documentation for additional informations : [PHP: Memcache - Manual](http://www.php.net/manual/en/book.memcache.php)
     - **memcached**: Only relevant for `memcached` cache driver, provide the Memcached instance to use. If not defined, a default Memcached object will be instanciated. See the Memcached documentation for additional informations : [PHP: Memcached - Manual](http://www.php.net/manual/en/book.memcached.php)
