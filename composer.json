@@ -12,9 +12,10 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "silex/silex": "~1.0"
+        "pimple/pimple": "~1.0"
     },
     "require-dev": {
+        "silex/silex": "~1.0",
         "phpunit/phpunit": "~3.7"
     },
     "autoload": {
