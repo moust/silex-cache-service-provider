@@ -11,7 +11,7 @@ To enable it, add this dependency to your ``composer.json`` file:
 ```json
 {
     "require": {
-        "moust/silex-cache-service-provider": "*"
+        "moust/silex-cache": "1.0.*@dev"
     }
 }
 ```
