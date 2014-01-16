@@ -143,7 +143,7 @@ class FileCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        $content = array('data' => $var, 'ttl' => $ttl);
+        $content = array('data' => $var, 'ttl' => (int) $ttl);
         return (bool) file_put_contents($this->getFileName($key), serialize($content));
     }
 

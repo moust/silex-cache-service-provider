@@ -11,14 +11,14 @@
 
 namespace Moust\Silex\Cache;
 
-class ApcCache extends AbstractCache
+class WincacheCache extends AbstractCache
 {
     /**
      * {@inheritdoc}
      */
     static function isSupported()
     {
-        return extension_loaded('apc');
+        return extension_loaded('wincache');
     }
 
     /**
@@ -26,7 +26,7 @@ class ApcCache extends AbstractCache
      */
     public function clear()
     {
-        return apc_clear_cache();
+        return wincache_ucache_clear();
     }
 
     /**
@@ -34,7 +34,7 @@ class ApcCache extends AbstractCache
      */
     public function delete($key)
     {
-        return apc_delete($key);
+        return wincache_ucache_delete($key);
     }
 
     /**
@@ -42,7 +42,7 @@ class ApcCache extends AbstractCache
      */
     public function exists($key)
     {
-        return apc_exists($key);
+        return wincache_ucache_exists($key);
     }
 
     /**
@@ -50,7 +50,7 @@ class ApcCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return apc_fetch($key);
+        return wincache_ucache_get($key);
     }
 
     /**
@@ -58,6 +58,6 @@ class ApcCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return apc_store($key, $var, (int) $ttl);
+        return wincache_ucache_set($key, $var, (int) $ttl);
     }
 }

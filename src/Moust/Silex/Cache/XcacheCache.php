@@ -11,14 +11,14 @@
 
 namespace Moust\Silex\Cache;
 
-class ApcCache extends AbstractCache
+class XcacheCache extends AbstractCache
 {
     /**
      * {@inheritdoc}
      */
     static function isSupported()
     {
-        return extension_loaded('apc');
+        return extension_loaded('xcache');
     }
 
     /**
@@ -26,7 +26,11 @@ class ApcCache extends AbstractCache
      */
     public function clear()
     {
-        return apc_clear_cache();
+        if (ini_get('xcache.admin.enable_auth')) {
+            throw new \BadMethodCallException('To use all features of \Moust\Silex\Cache\XcacheCache, you must set "xcache.admin.enable_auth" to "Off" in your php.ini.');
+        }
+        
+        return xcache_clear_cache(XC_TYPE_VAR, 0);
     }
 
     /**
@@ -34,7 +38,7 @@ class ApcCache extends AbstractCache
      */
     public function delete($key)
     {
-        return apc_delete($key);
+        return xcache_unset($key);
     }
 
     /**
@@ -42,7 +46,7 @@ class ApcCache extends AbstractCache
      */
     public function exists($key)
     {
-        return apc_exists($key);
+        return xcache_isset($key);
     }
 
     /**
@@ -50,7 +54,7 @@ class ApcCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return apc_fetch($key);
+        return xcache_get($key);
     }
 
     /**
@@ -58,6 +62,6 @@ class ApcCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return apc_store($key, $var, (int) $ttl);
+        return xcache_set($key, serialize($var), (int) $ttl);
     }
 }

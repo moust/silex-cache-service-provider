@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Moust\Silex\Tests;
+namespace Moust\Silex\Tests\Cache;
 
 use Moust\Silex\Cache\CacheFactory;
 

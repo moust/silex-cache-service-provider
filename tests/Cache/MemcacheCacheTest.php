@@ -9,21 +9,47 @@
  * file that was distributed with this source code.
  */
 
-namespace Moust\Silex\Tests;
+namespace Moust\Silex\Tests\Cache;
 
-use Moust\Silex\Cache\ArrayCache;
+use Moust\Silex\Cache\MemcacheCache;
+use Memcache;
 
-class ArrayCacheTest extends \PHPUnit_Framework_TestCase
+class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
 {
+    private $_memcache;
+
+    protected function setUp()
+    {
+        if (!extension_loaded('memcache')) {
+            $this->markTestSkipped('L\'extension Memcache n\'est pas disponible.');
+        }
+
+        $this->_memcache = new Memcache();
+
+        if (@$this->_memcache->connect('localhost', 11211) === false) {
+            unset($this->_memcache);
+            $this->markTestSkipped('The Memcache cannot connect to memcache');
+        }
+    }
+
+    public function tearDown()
+    {
+        if ($this->_memcache instanceof Memcache) {
+            $this->_memcache->flush();
+        }
+    }
+
     public function instanciateCache()
     {
-        $cache = new ArrayCache();
+        $cache = new MemcacheCache(array(
+            'memcache' => $this->_memcache
+        ));
 
-        $this->assertInstanceOf('Moust\Silex\Cache\ArrayCache', $cache);
+        $this->assertInstanceOf('Moust\Silex\Cache\MemcacheCache', $cache);
 
         return $cache;
     }
-    
+
     public function testCache()
     {
         $cache = $this->instanciateCache();
@@ -47,7 +73,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
         $foo = $cache->fetch('foo');
         $this->assertFalse($foo);
-
+        
         $bar = $cache->fetch('bar');
         $this->assertTrue(is_array($bar));
         $this->assertTrue(isset($bar['foo']));
@@ -61,5 +87,21 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($foo);
         $this->assertFalse($bar);
+    }
+
+    public function testCacheTtl()
+    {
+        $cache = $this->instanciateCache();
+
+        $return = $cache->store('foo', 'bar', 1);
+        $this->assertTrue($return);
+
+        $foo = $cache->fetch('foo');
+        $this->assertEquals($foo, 'bar');
+
+        sleep(1);
+
+        $foo = $cache->fetch('foo');
+        $this->assertFalse($foo);
     }
 }
