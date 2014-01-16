@@ -63,7 +63,7 @@ class MemcacheCache extends AbstractCache
      */
     public function clear()
     {
-        return $memcache->flush();
+        return $this->_memcache->flush();
     }
 
     /**
@@ -71,7 +71,7 @@ class MemcacheCache extends AbstractCache
      */
     public function delete($key)
     {
-        return $memcache->delete($key);
+        return $this->_memcache->delete($key);
     }
 
     /**
@@ -79,7 +79,7 @@ class MemcacheCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$memcache->get($key);
+        return !!$this->_memcache->get($key);
     }
 
     /**
@@ -87,7 +87,7 @@ class MemcacheCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return $memcache->get($key);
+        return $this->_memcache->get($key);
     }
 
     /**
@@ -95,6 +95,6 @@ class MemcacheCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return $memcache->set($key, $var, 0, $ttl);
+        return $this->_memcache->set($key, $var, 0, $ttl);
     }
 }
