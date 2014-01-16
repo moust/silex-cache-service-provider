@@ -12,26 +12,45 @@
 namespace Silex\Tests;
 
 use Silex\Cache\MemcacheCache;
+use Memcache;
 
 class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
 {
+    private $_memcache;
+
     protected function setUp()
     {
         if (!extension_loaded('memcache')) {
             $this->markTestSkipped('L\'extension Memcache n\'est pas disponible.');
         }
+
+        $this->_memcache = new Memcache();
+
+        if (@$this->_memcache->connect('localhost', 11211) === false) {
+            unset($this->_memcache);
+            $this->markTestSkipped('The Memcache cannot connect to memcache');
+        }
+    }
+
+    public function tearDown()
+    {
+        if ($this->memcache instanceof Memcache) {
+            $this->memcache->flush();
+        }
     }
 
     public function instanciateCache()
     {
-        $cache = new MemcacheCache();
+        $cache = new MemcacheCache(array(
+            'memcache' => $this->_memcache
+        ));
 
         $this->assertInstanceOf('Silex\Cache\MemcacheCache', $cache);
 
         return $cache;
     }
 
-    public function testApcCache()
+    public function testCache()
     {
         $cache = $this->instanciateCache();
 
@@ -70,14 +89,12 @@ class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($bar);
     }
 
-    public function testArrayCacheTtl()
+    public function testCacheTtl()
     {
         $cache = $this->instanciateCache();
 
-        $return = $cache->store('foo', 'bar', 2);
+        $return = $cache->store('foo', 'bar', 1);
         $this->assertTrue($return);
-
-        sleep(1);
 
         $foo = $cache->fetch('foo');
         $this->assertEquals($foo, 'bar');

@@ -31,7 +31,7 @@ class ApcCacheTest extends \PHPUnit_Framework_TestCase
         return $cache;
     }
 
-    public function testApcCache()
+    public function testCache()
     {
         $cache = $this->instanciateCache();
 
@@ -70,7 +70,7 @@ class ApcCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($bar);
     }
 
-    public function testApcCacheTtl()
+    public function testCacheTtl()
     {
         $cache = $this->instanciateCache();
 

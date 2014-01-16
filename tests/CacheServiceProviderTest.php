@@ -13,6 +13,7 @@ namespace Silex\Tests;
 
 use Silex\Application;
 use Silex\Provider\CacheServiceProvider;
+use Memcache;
 
 class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +64,7 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
                 'memcache' => array(
                     'driver' => 'memcache',
                     'memcache' => function () {
-                        $memcache = new \Memcache;
+                        $memcache = new Memcache;
                         $memcache->connect('localhost', 11211);
                         return $memcache;
                     }

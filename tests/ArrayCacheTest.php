@@ -24,7 +24,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
         return $cache;
     }
     
-    public function testArrayCache()
+    public function testCache()
     {
         $cache = $this->instanciateCache();
 

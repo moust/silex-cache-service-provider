@@ -86,7 +86,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($bar);
     }
 
-    public function testFileCacheTtl()
+    public function testCacheTtl()
     {
         $cache = $this->instanciateCache();
 
