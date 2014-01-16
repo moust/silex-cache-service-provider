@@ -69,20 +69,4 @@ class ApcCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($foo);
         $this->assertFalse($bar);
     }
-
-    public function testCacheTtl()
-    {
-        $cache = $this->instanciateCache();
-
-        $return = $cache->store('foo', 'bar', 1);
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertEquals($foo, 'bar');
-
-        sleep(2);
-
-        $foo = $cache->fetch('foo');
-        $this->assertFalse($foo);
-    }
 }
