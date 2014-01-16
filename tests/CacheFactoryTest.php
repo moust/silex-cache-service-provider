@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Tests;
+namespace Moust\Silex\Tests;
 
-use Silex\Cache\CacheFactory;
+use Moust\Silex\Cache\CacheFactory;
 
 class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 {
 	private $_drivers = array(
-        'apc'      => '\\Silex\\Cache\\ApcCache',
-        'array'    => '\\Silex\\Cache\\ArrayCache',
-        'file'     => '\\Silex\\Cache\\FileCache',
-        'memcache' => '\\Silex\\Cache\\MemcacheCache',
+        'apc'      => '\\Moust\\Silex\\Cache\\ApcCache',
+        'array'    => '\\Moust\\Silex\\Cache\\ArrayCache',
+        'file'     => '\\Moust\\Silex\\Cache\\FileCache',
+        'memcache' => '\\Moust\\Silex\\Cache\\MemcacheCache',
     );
 
     private $_options = array();
@@ -41,7 +41,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 
 		$cache = $factory->getCache('apc');
 
-		$this->assertInstanceOf('Silex\Cache\ApcCache', $cache);
+		$this->assertInstanceOf('Moust\Silex\Cache\ApcCache', $cache);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 	{
 		$cache = $factory->getCache('array');
 
-		$this->assertInstanceOf('Silex\Cache\ArrayCache', $cache);
+		$this->assertInstanceOf('Moust\Silex\Cache\ArrayCache', $cache);
 	}
 
 	/**
@@ -63,7 +63,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 			'cache_dir' => './temp'
 		));
 
-		$this->assertInstanceOf('Silex\Cache\FileCache', $cache);
+		$this->assertInstanceOf('Moust\Silex\Cache\FileCache', $cache);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 
 		$cache = $factory->getCache('memcache');
 
-		$this->assertInstanceOf('Silex\Cache\MemcacheCache', $cache);
+		$this->assertInstanceOf('Moust\Silex\Cache\MemcacheCache', $cache);
 
 		$cache = $factory->getCache('memcache', array(
 			'memcache' => function () {
@@ -87,6 +87,6 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
             }
 		));
 
-		$this->assertInstanceOf('Silex\Cache\MemcacheCache', $cache);
+		$this->assertInstanceOf('Moust\Silex\Cache\MemcacheCache', $cache);
 	}
 }

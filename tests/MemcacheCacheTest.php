@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Tests;
+namespace Moust\Silex\Tests;
 
-use Silex\Cache\MemcacheCache;
+use Moust\Silex\Cache\MemcacheCache;
 use Memcache;
 
 class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +45,7 @@ class MemcacheCacheTest extends \PHPUnit_Framework_TestCase
             'memcache' => $this->_memcache
         ));
 
-        $this->assertInstanceOf('Silex\Cache\MemcacheCache', $cache);
+        $this->assertInstanceOf('Moust\Silex\Cache\MemcacheCache', $cache);
 
         return $cache;
     }

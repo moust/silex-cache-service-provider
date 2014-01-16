@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Tests;
+namespace Moust\Silex\Tests;
 
-use Silex\Cache\FileCache;
+use Moust\Silex\Cache\FileCache;
 
 class FileCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     {
         $cache = new FileCache(array('cache_dir' => self::$cacheDir));
 
-        $this->assertInstanceOf('Silex\Cache\FileCache', $cache);
+        $this->assertInstanceOf('Moust\Silex\Cache\FileCache', $cache);
 
         return $cache;
     }

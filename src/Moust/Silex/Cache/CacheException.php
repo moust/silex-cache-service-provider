@@ -9,9 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Cache;
-
-use Silex\Cache;
+namespace Moust\Silex\Cache;
 
 class CacheException extends \Exception
 {

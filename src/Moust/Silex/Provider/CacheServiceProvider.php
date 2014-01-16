@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Provider;
+namespace Moust\Silex\Provider;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Silex\Cache\CacheFactory;
+use Moust\Silex\Cache\CacheFactory;
 
 class CacheServiceProvider implements ServiceProviderInterface
 {
@@ -25,10 +25,10 @@ class CacheServiceProvider implements ServiceProviderInterface
 
         $app['cache.drivers'] = function () {
             return array(
-                'apc'      => '\\Silex\\Cache\\ApcCache',
-                'array'    => '\\Silex\\Cache\\ArrayCache',
-                'file'     => '\\Silex\\Cache\\FileCache',
-                'memcache' => '\\Silex\\Cache\\MemcacheCache',
+                'apc'      => '\\Moust\\Silex\\Cache\\ApcCache',
+                'array'    => '\\Moust\\Silex\\Cache\\ArrayCache',
+                'file'     => '\\Moust\\Silex\\Cache\\FileCache',
+                'memcache' => '\\Moust\\Silex\\Cache\\MemcacheCache',
             );
         };
 

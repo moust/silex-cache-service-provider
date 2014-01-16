@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Cache;
+namespace Moust\Silex\Cache;
 
-use SIlex\Cache\AbstractCache;
-use Silex\Cache\CacheInterface;
-use Silex\Cache\CacheException;
+use Moust\Silex\Cache\AbstractCache;
+use Moust\Silex\Cache\CacheInterface;
+use Moust\Silex\Cache\CacheException;
 
 class CacheFactory
 {

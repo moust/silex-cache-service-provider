@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Cache;
+namespace Moust\Silex\Cache;
 
 class ApcCache extends AbstractCache
 {

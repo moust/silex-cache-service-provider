@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Tests;
+namespace Moust\Silex\Tests;
 
-use Silex\Cache\ApcCache;
+use Moust\Silex\Cache\ApcCache;
 
 class ApcCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class ApcCacheTest extends \PHPUnit_Framework_TestCase
     {
         $cache = new ApcCache();
 
-        $this->assertInstanceOf('Silex\Cache\ApcCache', $cache);
+        $this->assertInstanceOf('Moust\Silex\Cache\ApcCache', $cache);
 
         return $cache;
     }

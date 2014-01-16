@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Silex\Tests;
+namespace Moust\Silex\Tests;
 
-use Silex\Cache\ArrayCache;
+use Moust\Silex\Cache\ArrayCache;
 
 class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
     {
         $cache = new ArrayCache();
 
-        $this->assertInstanceOf('Silex\Cache\ArrayCache', $cache);
+        $this->assertInstanceOf('Moust\Silex\Cache\ArrayCache', $cache);
 
         return $cache;
     }
