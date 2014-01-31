@@ -29,7 +29,7 @@ class XcacheCache extends AbstractCache
         if (ini_get('xcache.admin.enable_auth')) {
             throw new \BadMethodCallException('To use all features of \Moust\Silex\Cache\XcacheCache, you must set "xcache.admin.enable_auth" to "Off" in your php.ini.');
         }
-        
+
         return xcache_clear_cache(XC_TYPE_VAR, 0);
     }
 
@@ -54,7 +54,7 @@ class XcacheCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return $this->exists($key) ? serialize(xcache_get($key)) : false;
+        return $this->exists($key) ? unserialize(xcache_get($key)) : false;
     }
 
     /**
