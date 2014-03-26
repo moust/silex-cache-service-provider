@@ -29,7 +29,7 @@ To enable it, add this dependency to your ``composer.json`` file:
 ## Registering
 
 ```php
-$app->register(new Silex\Provider\CacheServiceProvider(), array(
+$app->register(new Moust\Silex\Provider\CacheServiceProvider(), array(
     'cache.options' => array(
         'driver' => 'apc'
     )
@@ -58,7 +58,7 @@ $app['cache']->clear();
 The Cache provider can allow access to multiple caches. In order to configure the cache drivers, replace the `cache.options` with `caches.options`. `caches.options` is an array of configurations where keys are cache names and values are options:
 
 ```php
-$app->register(new Silex\Provider\CacheServiceProvider(), array(
+$app->register(new Moust\Silex\Provider\CacheServiceProvider(), array(
     'caches.options' => array(
         'apc' => array(
             'driver' => 'apc'
