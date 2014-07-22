@@ -100,10 +100,10 @@ class RedisCache extends AbstractCache
     public function store($key, $var = null, $ttl = 0)
     {
         if ($ttl > 0) {
-            return $this->redis->setex($key, (int) $ttl, $var);
+            return $this->_redis->setex($key, (int) $ttl, $var);
         }
 
-        return $this->redis->set($key, $var);
+        return $this->_redis->set($key, $var);
     }
 
     /**
