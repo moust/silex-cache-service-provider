@@ -37,7 +37,7 @@ class CacheServiceProvider implements ServiceProviderInterface
         };
 
         $app['cache.factory'] = $app->share(function ($app) {
-            return new CacheFactory($app['cache.drivers'], array());
+            return new CacheFactory($app['cache.drivers'], $app['caches.options']);
         });
 
         $app['caches.options.initializer'] = $app->protect(function () use ($app) {
@@ -76,9 +76,7 @@ class CacheServiceProvider implements ServiceProviderInterface
                     $config = $app['caches.config'][$name];
                 }
 
-                $factory = new CacheFactory($app['cache.drivers'], $app['caches.options']);
-
-                $caches[$name] = $caches->share(function ($caches) use ($app, $options, $config) {
+                $caches[$name] = $caches->share(function ($caches) use ($app, $config) {
                     return $app['cache.factory']->getCache($config['driver'], $config);
                 });
             }
