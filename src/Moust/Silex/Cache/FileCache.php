@@ -41,18 +41,18 @@ class FileCache extends AbstractCache
     /**
      * Sets the cache directory to use.
      *
-     * @param string $cacheDir 
+     * @param string $cacheDir
      */
     public function setCacheDir($cacheDir)
     {
         if (!$cacheDir) {
             throw new \InvalidArgumentException('The parameter $cacheDir must not be empty.');
         }
-        
+
         if (!is_dir($cacheDir) && !mkdir($cacheDir, 0777, true)) {
             throw new \RuntimeException('Unable to create the directory "'.$cacheDir.'"');
         }
-        
+
         // remove trailing slash
         if (in_array(substr($cacheDir, -1), array('\\', '/'))) {
             $cacheDir = substr($cacheDir, 0, -1);
@@ -134,7 +134,7 @@ class FileCache extends AbstractCache
         else {
             $this->delete($key);
         }
-        
+
         return false;
     }
 

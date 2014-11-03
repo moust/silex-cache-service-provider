@@ -55,11 +55,11 @@ class CacheFactory
         $options = array_merge($this->options, $options);
 
         $cache = new $class($options);
-        
+
         if (!$cache instanceof CacheInterface) {
             throw new CacheException('The cache driver "'.$driver.'" must implement CacheInterface.');
         }
-        
+
         return $cache;
     }
 

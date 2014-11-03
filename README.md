@@ -64,7 +64,7 @@ $app->register(new Moust\Silex\Provider\CacheServiceProvider(), array(
             'driver' => 'apc'
         ),
         'filesystem' => array(
-            'driver' => 'file', 
+            'driver' => 'file',
             'cache_dir' => './temp'
         ),
         'memory' => array(
