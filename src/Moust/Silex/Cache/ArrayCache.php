@@ -29,6 +29,14 @@ class ArrayCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
+    static function supportTtl()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function clear()
     {
         $this->_data = array();
@@ -57,8 +65,11 @@ class ArrayCache extends AbstractCache
      */
     public function fetch($key)
     {
-        if (isset($this->_data[$key])) {
-            return $this->_data[$key];
+        if ( isset($this->_data[$key]) && $this->isContentAlive($this->_data[$key]) ) {
+            return $this->_data[$key]['data'];
+        }
+        else {
+            $this->delete($key);
         }
 
         return false;
@@ -69,8 +80,13 @@ class ArrayCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        $this->_data[$key] = $var;
+        $this->_data[$key] = array('data' => $var, 'ttl' => (int) $ttl, 'created_at' => time());
 
         return true;
+    }
+
+    protected function isContentAlive($content)
+    {
+        return ($content['ttl'] === 0) || ((time() - $content['created_at']) < $content['ttl']);
     }
 }

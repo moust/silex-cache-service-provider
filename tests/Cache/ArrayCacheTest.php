@@ -62,4 +62,17 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($foo);
         $this->assertFalse($bar);
     }
+
+    public function testCacheTtl()
+    {
+        $cache = $this->instanciateCache();
+
+        $this->assertTrue( $cache->store('foo', 'bar', 1) );
+
+        $this->assertEquals( $cache->fetch('foo'), 'bar');
+
+        sleep(2);
+
+        $this->assertFalse( $cache->fetch('foo') );
+    }
 }
