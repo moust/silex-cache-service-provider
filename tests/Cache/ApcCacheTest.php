@@ -30,4 +30,9 @@ class ApcCacheTest extends AbstractCacheTest
 
         return $cache;
     }
+
+    public function testCacheTtl()
+    {
+        $this->markTestSkipped("APC will only expunged its cache on the next request");
+    }
 }
