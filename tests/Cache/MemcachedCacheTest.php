@@ -14,7 +14,7 @@ namespace Moust\Silex\Tests\Cache;
 use Moust\Silex\Cache\MemcachedCache;
 use Memcached;
 
-class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
+class MemcachedCacheTest extends AbstractCacheTest
 {
     private $_memcached;
 
@@ -50,60 +50,5 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Moust\Silex\Cache\MemcachedCache', $cache);
 
         return $cache;
-    }
-
-    public function testCache()
-    {
-        $cache = $this->instanciateCache();
-
-        $return = $cache->store('foo', 'bar');
-        $this->assertTrue($return);
-
-        $return = $cache->store('bar', array('foo' => 'bar'));
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertEquals($foo, 'bar');
-
-        $bar = $cache->fetch('bar');
-        $this->assertTrue(is_array($bar));
-        $this->assertTrue(isset($bar['foo']));
-        $this->assertEquals($bar['foo'], 'bar');
-
-        $return = $cache->delete('foo');
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertFalse($foo);
-        
-        $bar = $cache->fetch('bar');
-        $this->assertTrue(is_array($bar));
-        $this->assertTrue(isset($bar['foo']));
-        $this->assertEquals($bar['foo'], 'bar');
-
-        $return = $cache->clear();
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $bar = $cache->fetch('bar');
-
-        $this->assertFalse($foo);
-        $this->assertFalse($bar);
-    }
-
-    public function testCacheTtl()
-    {
-        $cache = $this->instanciateCache();
-
-        $return = $cache->store('foo', 'bar', 1);
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertEquals($foo, 'bar');
-
-        sleep(1);
-
-        $foo = $cache->fetch('foo');
-        $this->assertFalse($foo);
     }
 }

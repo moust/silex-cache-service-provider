@@ -13,7 +13,7 @@ namespace Moust\Silex\Tests\Cache;
 
 use Moust\Silex\Cache\WincacheCache;
 
-class WincacheCacheTest extends \PHPUnit_Framework_TestCase
+class WincacheCacheTest extends AbstractCacheTest
 {
     protected function setUp()
     {
@@ -29,44 +29,5 @@ class WincacheCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Moust\Silex\Cache\WincacheCache', $cache);
 
         return $cache;
-    }
-
-    public function testCache()
-    {
-        $cache = $this->instanciateCache();
-
-        $return = $cache->store('foo', 'bar');
-        $this->assertTrue($return);
-
-        $return = $cache->store('bar', array('foo' => 'bar'));
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertEquals($foo, 'bar');
-
-        $bar = $cache->fetch('bar');
-        $this->assertTrue(is_array($bar));
-        $this->assertTrue(isset($bar['foo']));
-        $this->assertEquals($bar['foo'], 'bar');
-
-        $return = $cache->delete('foo');
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $this->assertFalse($foo);
-        
-        $bar = $cache->fetch('bar');
-        $this->assertTrue(is_array($bar));
-        $this->assertTrue(isset($bar['foo']));
-        $this->assertEquals($bar['foo'], 'bar');
-
-        $return = $cache->clear();
-        $this->assertTrue($return);
-
-        $foo = $cache->fetch('foo');
-        $bar = $cache->fetch('bar');
-
-        $this->assertFalse($foo);
-        $this->assertFalse($bar);
     }
 }
