@@ -54,11 +54,11 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
         $return = $cache->store('foo', 'bar');
         $this->assertTrue($return);
 
-        $return = $cache->store('bar', array('foo' => 'bar'));
-        $this->assertTrue($return);
-
         $foo = $cache->fetch('foo');
         $this->assertEquals($foo, 'bar');
+
+        $return = $cache->store('bar', array('foo' => 'bar'));
+        $this->assertTrue($return);
 
         $bar = $cache->fetch('bar');
         $this->assertTrue(is_array($bar));
@@ -84,6 +84,19 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($foo);
         $this->assertFalse($bar);
+    }
+
+    public function testCacheExists()
+    {
+        $cache = $this->instanciateCache();
+
+        $cache->delete('foo');
+
+        $this->assertFalse( $cache->exists('foo') );
+
+        $cache->store('foo', 'bar');
+
+        $this->assertTrue( $cache->exists('foo') );
     }
 
     public function testCacheTtl()
