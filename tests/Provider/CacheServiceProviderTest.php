@@ -74,7 +74,7 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $this->assertInstanceof('Moust\Silex\Cache\RedisCache', $app['cache']);
+        $this->assertInstanceof('Moust\Silex\Cache\ApcCache', $app['cache']);
     }
 
     public function testMemcacheProvider()
