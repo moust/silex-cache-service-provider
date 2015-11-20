@@ -75,7 +75,7 @@ class RedisCache extends AbstractCache
      */
     public function delete($key)
     {
-        return $this->_redis->delete($key);
+        return !!$this->_redis->delete($key);
     }
 
     /**

@@ -34,56 +34,114 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $cache = $app['cache'];
-        $this->assertInstanceof('Moust\Silex\Cache\ArrayCache', $cache);
+        $this->assertInstanceof('Moust\Silex\Cache\ArrayCache', $app['cache']);
     }
 
     public function testMultipleCache()
     {
-        if (!extension_loaded('apc')) {
-            $this->setExpectedException('Moust\Silex\Cache\CacheException');
-        }
-
-        if (!extension_loaded('memcache')) {
-            $this->setExpectedException('Moust\Silex\Cache\CacheException');
-        }
-
         $app = new Application();
         $app->register(new CacheServiceProvider(), array(
             'caches.options' => array(
                 'memory' => array(
                     'driver' => 'array'
                 ),
-                'apc' => array(
-                    'driver' => 'apc'
-                ),
                 'filesystem' => array(
-                    'driver' => 'file', 
+                    'driver' => 'file',
                     'cache_dir' => './temp'
                 ),
-                'memcache' => array(
-                    'driver' => 'memcache',
-                    'memcache' => function () {
-                        $memcache = new Memcache;
-                        $memcache->connect('localhost', 11211);
-                        return $memcache;
-                    }
-                )
             ),
         ));
 
         $this->assertInstanceof('Moust\Silex\Cache\ArrayCache', $app['caches']['memory']);
 
-        // check default cache
-        $this->assertSame($app['cache'], $app['caches']['memory']);
-
         $this->assertInstanceof('Moust\Silex\Cache\FileCache', $app['caches']['filesystem']);
         $this->assertEquals('./temp', $app['caches']['filesystem']->getCacheDir());
 
-        $this->assertInstanceof('Moust\Silex\Cache\ApcCache', $app['caches']['apc']);
+        // check default cache
+        $this->assertSame($app['cache'], $app['caches']['memory']);
+    }
 
-        $this->assertInstanceof('Moust\Silex\Cache\MemcacheCache', $app['caches']['memcache']);
-        $this->assertInstanceof('Memcache', $app['caches']['memcache']->getMemcache());
+    public function testApcProvider()
+    {
+        if (!extension_loaded('apc')) {
+            $this->setExpectedException('Moust\Silex\Cache\CacheException');
+        }
+
+        $app = new Application();
+        $app->register(new CacheServiceProvider(), array(
+            'cache.options' => array(
+                'driver' => 'apc',
+            ),
+        ));
+
+        $this->assertInstanceof('Moust\Silex\Cache\RedisCache', $app['cache']);
+    }
+
+    public function testMemcacheProvider()
+    {
+        if (!extension_loaded('memcache')) {
+            $this->setExpectedException('Moust\Silex\Cache\CacheException');
+        }
+
+        $app = new Application();
+        $app->register(new CacheServiceProvider(), array(
+            'cache.options' => array(
+                'driver' => 'memcache',
+                'memcache' => function () {
+                    $memcache = new Memcache;
+                    $memcache->connect('localhost', 11211);
+                    return $memcache;
+                }
+            ),
+        ));
+
+        $this->assertInstanceof('Moust\Silex\Cache\MemcacheCache', $app['cache']);
+        $this->assertInstanceof('Memcache', $app['cache']->getMemcache());
+    }
+
+    public function testMemcachedProvider()
+    {
+        if (!extension_loaded('Memcached')) {
+            $this->setExpectedException('Moust\Silex\Cache\CacheException');
+        }
+
+        $app = new Application();
+        $app->register(new CacheServiceProvider(), array(
+            'cache.options' => array(
+                'driver' => 'memcached',
+                'memcached' => function () {
+                    $memcached = new Memcached(uniqid());
+                    $memcached->setOption(Memcached::OPT_COMPRESSION, false);
+                    $memcached->addServer('127.0.0.1', 11211);
+                    return $memcached;
+                }
+            ),
+        ));
+
+        $this->assertInstanceof('Moust\Silex\Cache\MemcachedCache', $app['cache']);
+        $this->assertInstanceof('Memcached', $app['cache']->getMemcached());
+    }
+
+    public function testRedisProvider()
+    {
+        if (!extension_loaded('redis')) {
+            $this->setExpectedException('Moust\Silex\Cache\CacheException');
+        }
+
+        $app = new Application();
+        $app->register(new CacheServiceProvider(), array(
+            'cache.options' => array(
+                'driver' => 'redis',
+                'redis' => function () {
+                    $redis = new \Redis();
+                    $redis->connect('127.0.0.1');
+                    return $redis;
+                }
+            ),
+        ));
+
+        $this->assertInstanceof('Moust\Silex\Cache\RedisCache', $app['cache']);
+        $this->assertInstanceof('Redis', $app['cache']->getRedis());
     }
 
 }

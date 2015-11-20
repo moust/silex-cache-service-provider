@@ -35,7 +35,7 @@ class RedisCacheTest extends AbstractCacheTest
     public function tearDown()
     {
         if ($this->_redis instanceof Redis) {
-            $this->_redis->flush();
+            $this->_redis->flushDB();
         }
     }
 
