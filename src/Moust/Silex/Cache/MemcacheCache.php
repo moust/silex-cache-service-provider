@@ -25,6 +25,10 @@ class MemcacheCache extends AbstractCache
      */
     public function __construct(array $options = array())
     {
+        if (isset($options['memcache']) && is_callable($options['memcache'])) {
+            $options['memcache'] = $options['memcache']();
+        }
+
         if (!isset($options['memcache']) || !$options['memcache'] instanceof Memcache) {
             $options['memcache'] = new Memcache;
             $options['memcache']->connect('localhost', 11211);

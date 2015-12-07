@@ -25,6 +25,10 @@ class MemcachedCache extends AbstractCache
      */
     public function __construct(array $options = array())
     {
+        if (isset($options['memcached']) && is_callable($options['memcached'])) {
+            $options['memcached'] = $options['memcached']();
+        }
+
         if (!isset($options['memcached']) || !$options['memcached'] instanceof Memcached) {
             $options['memcached'] = new Memcached(uniqid());
             $options['memcached']->setOption(Memcached::OPT_COMPRESSION, false);
