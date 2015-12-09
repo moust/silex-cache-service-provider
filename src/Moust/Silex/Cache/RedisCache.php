@@ -25,6 +25,10 @@ class RedisCache extends AbstractCache
      */
     public function __construct(array $options = array())
     {
+        if (isset($options['redis']) && is_callable($options['redis'])) {
+            $options['redis'] = $options['redis']();
+        }
+
         if (!isset($options['redis']) || !$options['redis'] instanceof Redis) {
             $options['redis'] = new Redis;
             $options['redis']->connect('127.0.0.1');

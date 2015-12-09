@@ -110,16 +110,16 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
             'cache.options' => array(
                 'driver' => 'memcached',
                 'memcached' => function () {
-                    $memcached = new Memcached(uniqid());
-                    $memcached->setOption(Memcached::OPT_COMPRESSION, false);
+                    $memcached = new \Memcached(uniqid());
+                    $memcached->setOption(\Memcached::OPT_COMPRESSION, false);
                     $memcached->addServer('127.0.0.1', 11211);
                     return $memcached;
                 }
             ),
         ));
 
-        $this->assertInstanceof('Moust\Silex\Cache\MemcachedCache', $app['cache']);
-        $this->assertInstanceof('Memcached', $app['cache']->getMemcached());
+        $this->assertInstanceof('\Moust\Silex\Cache\MemcachedCache', $app['cache']);
+        $this->assertInstanceof('\Memcached', $app['cache']->getMemcached());
     }
 
     public function testRedisProvider()
