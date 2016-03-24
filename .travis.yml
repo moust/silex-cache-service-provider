@@ -1,10 +1,10 @@
 language: php
 
 php:
-  - '5.3'
-  - '5.4'
   - '5.5'
+  - '5.6'
   - '7.0'
+  - hhvm
 
 services:
   - apc
@@ -13,6 +13,8 @@ services:
   - redis-server
 
 before_script:
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]] ; then pecl channel-update pecl.php.net; fi;
+  - if [[ $TRAVIS_PHP_VERSION =~ 5.[56] ]] ; then echo yes | pecl install apcu-4.0.10; fi;
   - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.enabled=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
