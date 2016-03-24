@@ -1,9 +1,10 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
+  - '5.3'
+  - '5.4'
+  - '5.5'
+  - '7.0'
 
 services:
   - apc
@@ -12,8 +13,10 @@ services:
   - redis-server
 
 before_script:
-  - sh -c "if [ `php-config --vernum` -ge 50500 ] ; then pecl config-set preferred_state beta; printf "yes\n" | pecl install apcu ; else echo 'extension=apc.so' >> ./tests/travis/php.ini ;fi"
-  - phpenv config-add ./tests/travis/php.ini
+  - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - composer --prefer-source install
 
