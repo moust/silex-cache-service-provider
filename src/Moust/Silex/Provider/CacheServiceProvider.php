@@ -12,12 +12,14 @@
 namespace Moust\Silex\Provider;
 
 use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Silex\Api\BootableProviderInterface;
 use Moust\Silex\Cache\CacheFactory;
 
-class CacheServiceProvider implements ServiceProviderInterface
+class CacheServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
-    public function register(Application $app)
+    public function register(Container $app)
     {
         $app['cache.default_options'] = array(
             'driver' => 'array'
@@ -36,7 +38,7 @@ class CacheServiceProvider implements ServiceProviderInterface
             );
         };
 
-        $app['cache.factory'] = $app->share(function ($app) {
+        $app['cache.factory'] = $app->factory(function ($app) {
             return new CacheFactory($app['cache.drivers'], $app['caches.options']);
         });
 
@@ -64,10 +66,10 @@ class CacheServiceProvider implements ServiceProviderInterface
             $app['caches.options'] = $tmp;
         });
 
-        $app['caches'] = $app->share(function ($app) {
+        $app['caches'] = $app->factory(function ($app) {
             $app['caches.options.initializer']();
 
-            $caches = new \Pimple();
+            $caches = new Container();
             foreach ($app['caches.options'] as $name => $options) {
                 if ($app['caches.default'] === $name) {
                     // we use shortcuts here in case the default has been overridden
@@ -76,7 +78,7 @@ class CacheServiceProvider implements ServiceProviderInterface
                     $config = $app['caches.config'][$name];
                 }
 
-                $caches[$name] = $caches->share(function ($caches) use ($app, $config) {
+                $caches[$name] = $caches->factory(function ($caches) use ($app, $config) {
                     return $app['cache.factory']->getCache($config['driver'], $config);
                 });
             }
@@ -84,10 +86,10 @@ class CacheServiceProvider implements ServiceProviderInterface
             return $caches;
         });
 
-        $app['caches.config'] = $app->share(function ($app) {
+        $app['caches.config'] = $app->factory(function ($app) {
             $app['caches.options.initializer']();
 
-            $configs = new \Pimple();
+            $configs = new Container();
             foreach ($app['caches.options'] as $name => $options) {
                 $configs[$name] = $options;
             }
@@ -96,13 +98,13 @@ class CacheServiceProvider implements ServiceProviderInterface
         });
 
         // shortcuts for the "first" cache
-        $app['cache'] = $app->share(function ($app) {
+        $app['cache'] = $app->factory(function ($app) {
             $caches = $app['caches'];
 
             return $caches[$app['caches.default']];
         });
 
-        $app['cache.config'] = $app->share(function ($app) {
+        $app['cache.config'] = $app->factory(function ($app) {
             $caches = $app['caches.config'];
 
             return $caches[$app['caches.default']];
