@@ -58,7 +58,7 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('./temp', $app['caches']['filesystem']->getCacheDir());
 
         // check default cache
-        $this->assertSame($app['cache'], $app['caches']['memory']);
+        $this->assertEquals($app['cache'], $app['caches']['memory']);
     }
 
     public function testApcProvider()
