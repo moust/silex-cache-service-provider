@@ -102,6 +102,8 @@ class MemcacheCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
+        // Memcache : Any time higher than 30 days is interpreted as a unix timestamp date.
+        $ttl = ($ttl > 2628000) ? time() + $ttl : $ttl;
         return $this->_memcache->set($key, $var, 0, (int) $ttl);
     }
 }
