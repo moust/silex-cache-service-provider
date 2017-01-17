@@ -28,6 +28,7 @@ class CacheServiceProvider implements ServiceProviderInterface, BootableProvider
         $app['cache.drivers'] = function () {
             return array(
                 'apc'       => '\\Moust\\Silex\\Cache\\ApcCache',
+                'apcu'       => '\\Moust\\Silex\\Cache\\ApcuCache',
                 'array'     => '\\Moust\\Silex\\Cache\\ArrayCache',
                 'file'      => '\\Moust\\Silex\\Cache\\FileCache',
                 'memcache'  => '\\Moust\\Silex\\Cache\\MemcacheCache',
