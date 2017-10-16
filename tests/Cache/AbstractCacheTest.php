@@ -78,7 +78,7 @@ abstract class AbstractCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse( $cache->exists('empty') );
 
-        $cache->store('empty', []);
+        $cache->store('empty', array());
 
         $this->assertTrue( $cache->exists('empty') );
 
