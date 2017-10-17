@@ -86,7 +86,13 @@ class MemcacheCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->_memcache->get($key);
+        // $flags stays untouched if $key was not found on the server,
+        // this way we can determine if bool(false) was stored
+        $flags = false;
+
+        $this->_memcache->get($key, $flags);
+
+        return $flags !== false;
     }
 
     /**
