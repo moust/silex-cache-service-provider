@@ -69,6 +69,38 @@ abstract class AbstractCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue( $cache->exists('foo') );
     }
 
+    public function testCacheExistsOfFalsyValues()
+    {
+        $cache = $this->instanciateCache();
+
+        // Empty array is a valid cache value
+        $cache->delete('empty');
+
+        $this->assertFalse( $cache->exists('empty') );
+
+        $cache->store('empty', array());
+
+        $this->assertTrue( $cache->exists('empty') );
+
+        // null is a valid cache value
+        $cache->delete('null');
+
+        $this->assertFalse( $cache->exists('null') );
+
+        $cache->store('null', null);
+
+        $this->assertTrue( $cache->exists('null') );
+
+        // false is a valid cache value
+        $cache->delete('false');
+
+        $this->assertFalse( $cache->exists('false') );
+
+        $cache->store('false', false);
+
+        $this->assertTrue( $cache->exists('false') );
+    }
+
 
     /**
      * Tests clear cache

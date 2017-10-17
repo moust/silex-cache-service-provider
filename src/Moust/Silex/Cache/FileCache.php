@@ -112,13 +112,29 @@ class FileCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->fetch($key);
+        return is_array($this->getStoredContent($key));
     }
 
     /**
      * {@inheritdoc}
      */
     public function fetch($key)
+    {
+        $content = $this->getStoredContent($key);
+
+        return is_array($content) ? $content['data'] : false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function store($key, $var = null, $ttl = 0)
+    {
+        $content = array('data' => $var, 'ttl' => (int) $ttl);
+        return (bool) file_put_contents($this->getFileName($key), serialize($content));
+    }
+
+    protected function getStoredContent($key)
     {
         $filename = $this->getFileName($key);
 
@@ -129,22 +145,12 @@ class FileCache extends AbstractCache
         $content = unserialize(file_get_contents($filename));
 
         if ($this->isContentAlive($content, $filename)) {
-            return $content['data'];
+            return $content;
         }
-        else {
-            $this->delete($key);
-        }
+
+        $this->delete($key);
 
         return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function store($key, $var = null, $ttl = 0)
-    {
-        $content = array('data' => $var, 'ttl' => (int) $ttl);
-        return (bool) file_put_contents($this->getFileName($key), serialize($content));
     }
 
     protected function isContentAlive($content, $filename)
