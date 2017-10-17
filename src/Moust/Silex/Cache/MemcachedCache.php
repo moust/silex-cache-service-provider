@@ -87,7 +87,9 @@ class MemcachedCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->_memcached->get($key);
+        $this->_memcached->get($key);
+
+        return $this->getMemcached()->getResultCode() !== \Memcached::RES_NOTFOUND;
     }
 
     /**
